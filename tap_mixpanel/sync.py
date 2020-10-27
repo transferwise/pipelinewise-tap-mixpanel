@@ -283,14 +283,17 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
                                     bookmark_field=bookmark_field,
                                     max_bookmark_value=max_bookmark_value,
                                     last_datetime=last_datetime)
-                                LOGGER.info('Stream {}, batch processed {} records'.format(
-                                    stream_name, record_count))
-
                                 total_records = total_records + record_count
                                 parent_total = parent_total + record_count
                                 date_total = date_total + record_count
                                 endpoint_total = endpoint_total + record_count
                                 transformed_data = []
+
+                                LOGGER.info('Stream {}, batch processed {} records, total {}, max bookmark {}'.format(
+                                    stream_name,
+                                    record_count,
+                                    endpoint_total,
+                                    max_bookmark_value))
                                 # End if (batch = limit 250)
                             # End if record
                         # End has export_data records loop
