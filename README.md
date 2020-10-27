@@ -1,8 +1,12 @@
-# tap-mixpanel
+# pipelinewise-tap-mixpanel
 
-This is a [Singer](https://singer.io) tap that produces JSON-formatted data
-following the [Singer
-spec](https://github.com/singer-io/getting-started/blob/master/SPEC.md).
+[![PyPI version](https://badge.fury.io/py/pipelinewise-tap-mixpanel.svg)](https://badge.fury.io/py/pipelinewise-tap-mixpanel)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/pipelinewise-tap-mixpanel.svg)](https://pypi.org/project/pipelinewise-tap-mixpanel/)
+[![License: AGPL](https://img.shields.io/badge/License-AGPLv3-yellow.svg)](https://opensource.org/licenses/AGPL-3.0)
+
+[Singer](https://www.singer.io/) tap that extracts data from a [Mixpanel API](https://developer.mixpanel.com/reference/overview) and produces JSON-formatted data following the [Singer spec](https://github.com/singer-io/getting-started/blob/master/docs/SPEC.md).
+
+This is a [PipelineWise](https://transferwise.github.io/pipelinewise) compatible tap connector.
 
 This tap:
 
@@ -92,30 +96,14 @@ More details may be found in the [Mixpanel API Authentication](https://developer
 
 1. Install
 
-    Clone this repository, and then install using setup.py. We recommend using a virtualenv:
-
     ```bash
-    > virtualenv -p python3 venv
-    > source venv/bin/activate
-    > python setup.py install
-    OR
-    > cd .../tap-mixpanel
-    > pip install .
+    python3 -m venv venv
+    . venv/bin/activate
+    pip install --upgrade pip
+    pip install .
     ```
-2. Dependent libraries. The following dependent libraries were installed.
-    ```bash
-    > pip install singer-python
-    > pip install jsonlines
-    > pip install singer-tools
-    > pip install target-stitch
-    > pip install target-json
-    
-    ```
-    - [singer-tools](https://github.com/singer-io/singer-tools)
-    - [target-stitch](https://github.com/singer-io/target-stitch)
-    - [jsonlines](https://jsonlines.readthedocs.io/en/latest/) needed for `export` endpoint json-lines formatted data
-
-3. Create your tap's `config.json` file.  The tap config file for this tap should include these entries:
+ 
+2. Create your tap's `config.json` file.  The tap config file for this tap should include these entries:
    - `start_date` - the default value to use if no bookmark exists for an endpoint (rfc3339 date string)
    - `user_agent` (string, optional): Process and email for API logging purposes. Example: `tap-mixpanel <api_user_email@your_company.com>`
    - `api_secret` (string, `ABCdef123`): an API secret for each project in Mixpanel. This can be found in the Mixpanel Console, upper-right Settings (gear icon), Organization Settings > Projects and in the Access Keys section. For this tap, only the api_secret is needed (the api_key is legacy and the token is used only for uploading data). Each Mixpanel project has a different api_secret; therefore each Singer tap pipeline instance is for a single project.
@@ -149,7 +137,7 @@ More details may be found in the [Mixpanel API Authentication](https://developer
     }
     ```
 
-4. Run the Tap in Discovery Mode
+3. Run the Tap in Discovery Mode
     This creates a catalog.json for selecting objects/fields to integrate:
     ```bash
     tap-mixpanel --config config.json --discover > catalog.json
@@ -157,13 +145,15 @@ More details may be found in the [Mixpanel API Authentication](https://developer
    See the Singer docs on discovery mode
    [here](https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#discovery-mode).
 
-5. Run the Tap in Sync Mode (with catalog) and [write out to state file](https://github.com/singer-io/getting-started/blob/master/docs/RUNNING_AND_DEVELOPING.md#running-a-singer-tap-with-a-singer-target)
+4. Run the Tap in Sync Mode (with catalog) and [write out to state file](https://github.com/singer-io/getting-started/blob/master/docs/RUNNING_AND_DEVELOPING.md#running-a-singer-tap-with-a-singer-target)
 
     For Sync mode:
     ```bash
-    > tap-mixpanel --config tap_config.json --catalog catalog.json > state.json
-    > tail -1 state.json > state.json.tmp && mv state.json.tmp state.json
+    > tap-mixpanel --config tap_config.json --catalog catalog.json
     ```
+   
+    Messages are written to standard output following the Singer specification.
+    The resultant stream of JSON data can be consumed by a Singer target.
     To load to json files to verify outputs:
     ```bash
     > tap-mixpanel --config tap_config.json --catalog catalog.json | target-json > state.json
@@ -175,60 +165,20 @@ More details may be found in the [Mixpanel API Authentication](https://developer
     > tail -1 state.json > state.json.tmp && mv state.json.tmp state.json
     ```
 
-6. Test the Tap
-    
-    While developing the mixpanel tap, the following utilities were run in accordance with Singer.io best practices:
-    Pylint to improve [code quality](https://github.com/singer-io/getting-started/blob/master/docs/BEST_PRACTICES.md#code-quality):
+# Test
+
+1. Install python test dependencies in a virtual env and run nose unit and integration tests
+
     ```bash
-    > pylint tap_mixpanel -d missing-docstring -d logging-format-interpolation -d too-many-locals -d too-many-arguments
-    ```
-    Pylint test resulted in the following score:
-    ```bash
-    Your code has been rated at 9.67/10
-    ```
-
-    To [check the tap](https://github.com/singer-io/singer-tools#singer-check-tap) and verify working:
-    ```bash
-    > tap-mixpanel --config tap_config.json --catalog catalog.json | singer-check-tap > state.json
-    > tail -1 state.json > state.json.tmp && mv state.json.tmp state.json
-    ```
-    Check tap resulted in the following:
-    ```bash
-    The output is valid.
-    It contained 15697 messages for 7 streams.
-
-          7 schema messages
-      15661 record messages
-        29 state messages
-
-    Details by stream:
-    +----------------+---------+---------+
-    | stream         | records | schemas |
-    +----------------+---------+---------+
-    | revenue        | 134     | 1       |
-    | export         | 2811    | 1       |
-    | funnels        | 132     | 1       |
-    | cohort_members | 454     | 1       |
-    | engage         | 12119   | 1       |
-    | cohorts        | 5       | 1       |
-    | annotations    | 6       | 1       |
-    +----------------+---------+---------+
-
+    python3 -m venv venv
+    . venv/bin/activate
+    pip install --upgrade pip
+    pip install .[test]
     ```
 
-    #### Unit Tests
-
-    Unit tests may be run with the following.
+2. Run unit tests
 
     ```
-    python -m pytest --verbose
-    ```
-
-    Note, you may need to install test dependencies.
-
-    ```
-    pip install -e .'[dev]'
+    pytest tests/unittests
     ```
 ---
-
-Copyright &copy; 2019 Stitch
