@@ -8,6 +8,8 @@ with open("README.md", "r") as fh:
 setup(name='pipelinewise-tap-mixpanel',
       version='1.0.0',
       description='Singer.io tap for extracting data from the mixpanel API - PipelineWise compatible',
+      long_description=long_description,
+      long_description_content_type='text/markdown',
       author='jeff.huth@bytecode.io & TransferWise',
       classifiers=[
           'License :: OSI Approved :: GNU Affero General Public License v3',
