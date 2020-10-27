@@ -2,21 +2,28 @@
 
 from setuptools import setup, find_packages
 
-setup(name='tap-mixpanel',
-      version='1.0.2',
-      description='Singer.io tap for extracting data from the mixpanel API',
-      author='jeff.huth@bytecode.io',
-      classifiers=['Programming Language :: Python :: 3 :: Only'],
+with open("README.md", "r") as fh:
+    long_description = fh.read()
+
+setup(name='pipelinewise-tap-mixpanel',
+      version='0.0.1',
+      description='Singer.io tap for extracting data from the mixpanel API - PipelineWise compatible',
+      author='jeff.huth@bytecode.io & TransferWise',
+      classifiers=[
+          'License :: OSI Approved :: GNU Affero General Public License v3',
+          'Programming Language :: Python :: 3 :: Only'
+      ],
       py_modules=['tap_mixpanel'],
       install_requires=[
           'backoff==1.8.0',
           'requests==2.22.0',
-          'singer-python==5.9.0',
+          'pipelinewise-singer-python==1.*',
           'jsonlines==1.2.0'
       ],
       extras_require={
-        'dev': [
+        'test': [
             'pytest',
+            'pylint',
             'requests_mock',
         ]
       },
