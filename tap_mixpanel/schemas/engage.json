@@ -4,6 +4,9 @@
   "properties": {
     "distinct_id": {
       "type": ["null", "string"]
+    },
+    "properties": {
+      "type": ["null", "object"]
     }
   }
 }
