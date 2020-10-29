@@ -7,7 +7,7 @@ from singer.utils import strftime
 LOGGER = singer.get_logger()
 
 # De-nest properties for engage and export endpoints
-def denest_properties(record, properties_node):
+def denest_properties(record, properties_node, keep_original_properties=None):
     new_record = record
     properties = record.get(properties_node)
     if properties:
@@ -18,7 +18,11 @@ def denest_properties(record, properties_node):
             else:
                 new_key = key
             new_record[new_key] = val
-        new_record.pop(properties_node, None)
+        if keep_original_properties:
+            new_record['properties'] = new_record.pop(properties_node, None)
+        if not keep_original_properties:
+            new_record.pop(properties_node, None)
+
     return new_record
 
 
@@ -75,12 +79,16 @@ def transform_cohort_members(record, parent_record):
 
 
 # Run other transforms, as needed: denest_list_nodes, transform_conversation_parts
-def transform_record(record, stream_name, project_timezone, parent_record=None):
+def transform_record(record, stream_name, project_timezone, parent_record=None, denest_properties_flag=None):
     if stream_name == 'engage':
         trans_json = transform_engage(record)
-        new_record = denest_properties(trans_json, '$properties')
+        new_record = denest_properties(trans_json,
+                                       '$properties',
+                                       keep_original_properties=str(denest_properties_flag).lower() != 'true')
     elif stream_name == 'export':
-        denested_json = denest_properties(record, 'properties')
+        denested_json = denest_properties(record,
+                                          'properties',
+                                          keep_original_properties=str(denest_properties_flag).lower() != 'true')
         new_record = transform_event_times(denested_json, project_timezone)
     elif stream_name == 'funnels':
         new_record = transform_funnels(record, parent_record)
