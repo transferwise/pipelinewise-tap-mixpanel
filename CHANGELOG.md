@@ -1,3 +1,9 @@
+1.2.0 (2020-10-29)
+-------------------
+
+- Add optional `denest_properties` optional param
+- Fix key properties in the export stream
+
 1.1.0 (2020-10-29)
 -------------------
 
