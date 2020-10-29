@@ -1,3 +1,9 @@
+1.1.0 (2020-10-29)
+-------------------
+
+- Add key properties to export stream
+- Add `mp_reserved_insert_id` to export stream
+
 1.0.1 (2020-10-27)
 -------------------
 
