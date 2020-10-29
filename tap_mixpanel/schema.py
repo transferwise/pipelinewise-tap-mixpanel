@@ -105,6 +105,13 @@ def get_schema(client, properties_flag, stream_name):
                 'type': ['null', 'string']
             }
 
+        # Add insert_id separately
+        insert_id_key = 'mp_reserved_insert_id'
+        if insert_id_key not in schema['properties']:
+            schema['properties'][insert_id_key] = {
+                'type': ['null', 'string']
+            }
+
     return schema
 
 def get_schemas(client, properties_flag):
