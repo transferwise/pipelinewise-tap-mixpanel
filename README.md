@@ -99,10 +99,7 @@ More details may be found in the [Mixpanel API Authentication](https://developer
 1. Install
 
     ```bash
-    python3 -m venv venv
-    . venv/bin/activate
-    pip install --upgrade pip
-    pip install .
+    make venv
     ```
  
 2. Create your tap's `config.json` file.  The tap config file for this tap should include these entries:
@@ -178,18 +175,32 @@ More details may be found in the [Mixpanel API Authentication](https://developer
 
 # Test
 
-1. Install python test dependencies in a virtual env and run nose unit and integration tests
+1. Install python test dependencies in a virtual env
 
     ```bash
-    python3 -m venv venv
-    . venv/bin/activate
-    pip install --upgrade pip
-    pip install .[test]
+    make venv
     ```
 
 2. Run unit tests
 
     ```
-    pytest tests/unittests
+    make unit_test
     ```
----
+
+# Linting
+
+1. Install python test dependencies in a virtual env
+
+    ```bash
+    make venv
+    ```
+
+2. Run linter
+
+    ```
+    make pylint
+    ```
+
+# Licence
+
+GNU AFFERO GENERAL PUBLIC [LICENSE](./LICENSE)
