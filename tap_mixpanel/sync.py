@@ -160,8 +160,8 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
 
         start_window = now_datetime - timedelta(days=delta_days)
         end_window = start_window + timedelta(days=days_interval)
-        if end_window > now_datetime:
-            end_window = now_datetime
+        end_window = min(end_window, now_datetime)
+
     else:
         start_window = strptime_to_utc(last_datetime)
         end_window = now_datetime
@@ -419,9 +419,7 @@ def sync_endpoint(client, #pylint: disable=too-many-branches
 
                             # to_rec: to record; ending record for the batch page
                             if pagination:
-                                to_rec = offset + limit
-                                if to_rec > total_records:
-                                    to_rec = total_records
+                                to_rec = min(offset + limit, total_records)
                             else:
                                 to_rec = record_count
 
