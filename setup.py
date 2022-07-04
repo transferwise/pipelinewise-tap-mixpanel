@@ -20,7 +20,7 @@ setup(name='pipelinewise-tap-mixpanel',
           'backoff==1.8.0',
           'requests==2.22.0',
           'pipelinewise-singer-python==1.*',
-          'jsonlines==1.2.0'
+          'jsonlines==3.1.0'
       ],
       extras_require={
         'test': [
