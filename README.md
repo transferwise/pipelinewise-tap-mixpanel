@@ -1,3 +1,10 @@
+# Notice
+To better serve Wise business and customer needs, the PipelineWise codebase needs to shrink.
+We have made the difficult decision that, going forward many components of PipelineWise will be removed or incorporated in the main repo.
+The last version before this decision is [v0.64.1](https://github.com/transferwise/pipelinewise/tree/v0.64.1)
+
+We thank all in the open-source community, that over the past 6 years, have helped to make PipelineWise a robust product for heterogeneous replication of many many Terabytes, daily
+
 # pipelinewise-tap-mixpanel
 
 [![PyPI version](https://badge.fury.io/py/pipelinewise-tap-mixpanel.svg)](https://badge.fury.io/py/pipelinewise-tap-mixpanel)
@@ -91,7 +98,7 @@ The Mixpanel API uses Basic Authorization with the `api_secret` from the tap con
 
 - Authorization: `Basic <base-64 encoded api_secret>`
 
-More details may be found in the [Mixpanel API Authentication](https://developer.mixpanel.com/docs/data-export-api#section-authentication) instructions. 
+More details may be found in the [Mixpanel API Authentication](https://developer.mixpanel.com/docs/data-export-api#section-authentication) instructions.
 
 
 ## Quick Start
@@ -101,14 +108,14 @@ More details may be found in the [Mixpanel API Authentication](https://developer
     ```bash
     make venv
     ```
- 
+
 2. Create your tap's `config.json` file.  The tap config file for this tap should include these entries:
    - `start_date` - the default value to use if no bookmark exists for an endpoint (rfc3339 date string)
    - `user_agent` (string, optional): Process and email for API logging purposes. Example: `tap-mixpanel <api_user_email@your_company.com>`
    - `api_secret` (string, `ABCdef123`): an API secret for each project in Mixpanel. This can be found in the Mixpanel Console, upper-right Settings (gear icon), Organization Settings > Projects and in the Access Keys section. For this tap, only the api_secret is needed (the api_key is legacy and the token is used only for uploading data). Each Mixpanel project has a different api_secret; therefore each Singer tap pipeline instance is for a single project.
    - `date_window_size` (integer, `30`): Number of days for date window looping through transactional endpoints with from_date and to_date. Default date_window_size is 30 days. Clients with large volumes of events may want to decrease this to 14, 7, or even down to 1-2 days.
    - `attribution_window` (integer, `5`): Latency minimum number of days to look-back to account for delays in attributing accurate results. [Default attribution window is 5 days](https://help.mixpanel.com/hc/en-us/articles/115004616486-Tracking-If-Users-Are-Offline).
-   - `project_timezone` (string like `US/Pacific`): Time zone in which integer date times are stored. The project timezone may be found in the project settings in the Mixpanel console. [More info about timezones](https://help.mixpanel.com/hc/en-us/articles/115004547203-Manage-Timezones-for-Projects-in-Mixpanel). 
+   - `project_timezone` (string like `US/Pacific`): Time zone in which integer date times are stored. The project timezone may be found in the project settings in the Mixpanel console. [More info about timezones](https://help.mixpanel.com/hc/en-us/articles/115004547203-Manage-Timezones-for-Projects-in-Mixpanel).
    - `select_properties_by_default` (`true` or `false`): Mixpanel properties are not fixed and depend on the date being uploaded. During Discovery mode and catalog.json setup, all current/existing properties will be captured. Setting this config parameter to true ensures that new properties on events and engage records are captured. Otherwise new properties will be ignored.
    - `denest_properties` (`true` or `false`): To denest large and nested JSON Mixpanel responses in the `extract` and `engage` streams. To avoid very wide schema you can disable the denesting feature and the original JSON response will be sent in the RECORD message as plain object. Default `denest_properties` is `true`.
 
@@ -124,14 +131,14 @@ More details may be found in the [Mixpanel API Authentication](https://developer
         "user_agent": "tap-mixpanel <api_user_email@your_company.com>"
     }
     ```
-    
+
     If you want to export only certain events from the [Raw export API](https://developer.mixpanel.com/reference/export)
     then add `export_events` option to the `config.json` and list the required event names:
-    
+
     ```bash
    "export_events": ["event_one", "event_two"]
    ```
-    
+
     Optionally, also create a `state.json` file. `currently_syncing` is an optional attribute used for identifying the last object to be synced in case the job is interrupted mid-stream. The next run would begin where the last job left off.
 
     ```json
@@ -159,7 +166,7 @@ More details may be found in the [Mixpanel API Authentication](https://developer
     ```bash
     > tap-mixpanel --config tap_config.json --catalog catalog.json
     ```
-   
+
     Messages are written to standard output following the Singer specification.
     The resultant stream of JSON data can be consumed by a Singer target.
     To load to json files to verify outputs:
